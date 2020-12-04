@@ -15,7 +15,7 @@
 
         .heading h1 {
             text-align: center;
-            background-color: #0D1B2E;
+            background-color: #1a1a1a;
             color: white;
             padding: 30px 0;
         }
@@ -43,36 +43,66 @@
             font-size: 25px;
             border: 5px solid #429890;
             outline: none;
+            padding:5px;
         }
 
-        @media screen and (max-width: 500px) {
+        @media screen and (max-width: 545px) {
             #text1 {
-                padding-bottom: 130px;
+                /* padding-bottom: 130px; */
                 width: 70%;
             }
+            .timebtn{
+                flex-direction: column;
+            }
+            .reset{
+                margin: auto;
+            }
+            .timer{
+                margin: auto;
+            }
+           
         }
 
         textarea {
             resize: none;
         }
-      
 
-        .timebtn{
+        .timebtn {
             display: flex;
             justify-content: space-between;
             width: 50%;
             margin: auto;
             margin-top: 20px;
         }
-        .statrbtn{
+
+        .statrbtn {
             padding: 10px 30px;
             font-size: 20px;
-        }
-        .timer{
+            background-color:  #429890;
+            outline: none;
             border: 1px solid black;
-            padding: 10px 30px;
-            font-size: 20px;
+            color: white;
+          
         }
+
+        .timer {
+            border: 1px solid black;
+            padding: 10px 40px;
+            font-size: 20px;
+            text-align: center;
+            color: white;
+            background-color:  #429890;
+        }
+
+        #showresult,
+        #showwpm {
+          padding: 10px;
+            margin: auto;
+        }
+      ::placeholder{
+        text-align:center;
+        
+      }
     </style>
 </head>
 
@@ -82,38 +112,80 @@
     </div>
 
     <div id="oritext">
-        <p>
-            At home
+        <p id="oritext1">
         </p>
     </div>
 
     <div style="text-align: center; margin-top: 30px;">
-        <textarea name="" id="text1" cols="30" rows="10"  placeholder="    Timer Is Start When You Start Typing!"></textarea>
+        <textarea name="" id="text1" cols="30" rows="10" onfocus='this.placeholder=""' onblur="this.placeholder='Timer Is Start When You Start Typing!'" 
+            placeholder="Timer Is Start When You Start Typing!"  oncopy="return false" ondrag="return false" ondrop="return false"></textarea>
     </div>
 
-   <div class="timebtn">
-    <div class="timer"><span id="minutes">00</span>:<span id="seconds">00</span></div>
-    <div> <button class="statrbtn" onclick="myfun()">END </button></div>
-   </div>
+    <div class="timebtn">
+        <div class="timer"><span id="minutes">00</span>:<span id="seconds">00</span></div>
+        <div id="showresult"></div>
+        <div id="showwpm"></div>
+        <div class="reset"> <button class="statrbtn" onclick="reset()">RESET</button></div>
+    </div>
 
 </body>
 
 <script>
 
-    var j=0;
+    var j = 0;
+    var k = 0;
+    var pmin;
+    var psec;
     var end;
-    var origtext = document.getElementById("oritext")
+    var wpm;
+    var totsec;
+    var c=0;
+    var a1 = "My friend is afraid of spiders. This isn't very unusual.A lot of people are afraid of spiders. But my friend isn't just afraid of spiders, she is totally, completely and utterly terrified of them."
+    var a2="Alberto took one look at his new neighbours and knew that his life was going to get more difficult. There they were, two of them, as big and as noisy as their car – and smelly and stupid as well."
+    var a3="I looked at my watch and saw that it was going backwards. 'That's OK,' I was thinking. 'If my watch is going backwards, then it means that it's early, so I'm not late for work at all."
+    var a4="It is the 22nd century and the world is very different. With new technologies, people can have the bodies that they want. See what happens when Mr Smith decides to change his body. "
+    var a5="Scarlett is twelve years old and is trying to understand the world around her. She asks questions about everything, all the time. She also says that she already knows five languages."
+    var a6="Henry is an astronomer. He is very excited because he thinks he might have discovered the beginning of a new star. But then he gets even more exciting news."
+    var a7="Nikos was an ordinary man. One thing that he did not believe in was superstition. But when so many things that are meant to cause bad luck started bringing him good luck, he began to wonder."
+    a =[a1,a2,a3,a4,a5,a6,a7];
+   function myfun1(){
+       
+        c=Math.floor(Math.random() * 4); 
+        document.getElementById("oritext1").innerText=a[c];
+       
+    }
+    setTimeout(myfun1,1);
+   
+
     var matched = document.getElementById("text1")
 
     matched.addEventListener('keyup', matching);
     function matching() {
-        
-        end=setInterval(setTime, 1000);
-        var origtext1 = origtext.innerText;
+
+        if (k == 0) {
+            end = setInterval(setTime, 1000);
+            k++;
+        }
+        var origtext1 =document.getElementById("oritext1").innerText;
         var matched1 = matched.value;
 
-        var len = matched1.length;
+        if (origtext1 == matched1) {
 
+            document.getElementById("showresult").style.display = "block"
+            document.getElementById("showwpm").style.display = "block"
+
+            matched.style.display = "none";
+            document.getElementById("showresult").innerHTML = "Total Time Taken: " + pmin + ":" + psec;
+            // count no. of word
+            var arr = origtext1.split(" ");
+            wpm =parseInt( Number(arr.length) / ((Number(totsecnd / 60))));
+            console.log(Number(arr.length))
+            console.log(Number(totsecnd / 60))
+            document.getElementById("showwpm").innerHTML = "Word Per Minute: " + wpm;
+            myfun();
+        }
+
+        var len = matched1.length;
         var str1 = origtext1.substring(0, len)
         var str2 = matched1.substring(0, len)
 
@@ -133,18 +205,30 @@
     var second = document.getElementById("seconds");
     var totsecnd = 0;
 
-   function myfun(){
-       console.log(end)
-      clearInterval(end);
-    
-   }
+    function myfun() {
+        clearInterval(end);
+        totsecnd = 0;
+        second.innerHTML = "00";
+        minute.innerHTML = "00";
+        matched.value = "";
+        k = 0;
 
-   function setTime() {
-        ++totsecnd;
-        second.innerHTML = pad(totsecnd % 60);
-        minute.innerHTML = pad(parseInt(totsecnd / 60));
     }
-    
+    function reset() {
+        myfun();
+        myfun1();
+        matched.style.display = "block";
+        matched.style.margin = "auto";
+        document.getElementById("showresult").style.display = "none"
+        document.getElementById("showwpm").style.display = "none"
+    }
+
+    function setTime() {
+        ++totsecnd;
+        psec = second.innerHTML = pad(totsecnd % 60);
+        pmin = minute.innerHTML = pad(parseInt(totsecnd / 60));
+        console.log(psec, pmin);
+    }
 
 
     function pad(val) {
