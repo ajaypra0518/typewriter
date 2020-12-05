@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>Document</title>
 
     <style>
@@ -56,6 +56,7 @@
             }
             .reset{
                 margin: auto;
+                margin-top: 10px;
             }
             .timer{
                 margin: auto;
@@ -99,6 +100,7 @@
         #showwpm {
           padding: 10px;
             margin: auto;
+            display: none;
         }
       ::placeholder{
         text-align:center;
@@ -119,7 +121,7 @@
 
     <div style="text-align: center; margin-top: 30px;">
         <textarea  id="text1" cols="30" rows="10" onfocus='this.placeholder=""' onblur="this.placeholder='Timer Is Start When You Start Typing!'" 
-            placeholder="Timer Is Start When You Start Typing!" onpaste="return false" oncopy="return false" ondrag="return false" ondrop="return false"></textarea>
+            placeholder="Timer Is Start When You Start Typing!"  oncopy="return false" ondrag="return false" ondrop="return false"></textarea>
     </div>
 
     <div class="timebtn">
@@ -177,12 +179,13 @@
             document.getElementById("showwpm").style.display = "block"
 
             matched.style.display = "none";
+            document.getElementById("showresult").style.display="block";
             document.getElementById("showresult").innerHTML = "Total Time: " + pmin + ":" + psec;
             // count no. of word
             var arr = origtext1.split(" ");
             wpm =parseInt( Number(arr.length) / ((Number(totsecnd / 60))));
-            console.log(Number(arr.length))
-            console.log(Number(totsecnd / 60))
+        
+            document.getElementById("showwpm").style.display="block";
             document.getElementById("showwpm").innerHTML = "Word Per Minute: " + wpm;
             myfun();
         }
